@@ -94,3 +94,18 @@ XLayer or YLayer object to be added to a ggplot object
 The \link{xside} and \link{yside} variants of \link[ggplot2]{geom_density} is
 \link{geom_xsidedensity} and \link{geom_ysidedensity}.
 }
+\examples{
+
+ggplot(mpg, aes(displ, hwy, colour = class)) +
+ geom_point(size = 2) +
+ geom_xsidedensity() +
+ geom_ysidedensity() +
+ theme(axis.text.x = element_text(angle = 90, vjust = .5))
+
+ggplot(mpg, aes(displ, hwy, colour = class)) +
+ geom_point(size = 2) +
+ geom_xsidedensity(aes(y = after_stat(count)),position = "stack") +
+ geom_ysidedensity(aes(x = after_stat(scaled))) +
+ theme(axis.text.x = element_text(angle = 90, vjust = .5))
+
+}

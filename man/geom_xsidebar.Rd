@@ -141,6 +141,22 @@ Required aesthetics are in bold.
 }
 }
 
+\examples{
+
+p <-ggplot(iris, aes(Sepal.Width, Sepal.Length, color = Species, fill = Species)) +
+geom_point()
+
+#sidebar - uses StatCount
+p +
+geom_xsidebar() +
+geom_ysidebar()
+
+#sidecol - uses Global mapping
+p +
+  geom_xsidecol() +
+  geom_ysidecol()
+
+}
 \seealso{
 \link{geom_xsidehistogram}, \link{geom_ysidehistogram}
 }

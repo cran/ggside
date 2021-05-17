@@ -11,6 +11,20 @@
 #'   `geom_density()` and `stat_density()`.
 #' @aliases geom_*sidedensity
 #' @return XLayer or YLayer object to be added to a ggplot object
+#' @examples
+#'
+#' ggplot(mpg, aes(displ, hwy, colour = class)) +
+#'  geom_point(size = 2) +
+#'  geom_xsidedensity() +
+#'  geom_ysidedensity() +
+#'  theme(axis.text.x = element_text(angle = 90, vjust = .5))
+#'
+#' ggplot(mpg, aes(displ, hwy, colour = class)) +
+#'  geom_point(size = 2) +
+#'  geom_xsidedensity(aes(y = after_stat(count)),position = "stack") +
+#'  geom_ysidedensity(aes(x = after_stat(scaled))) +
+#'  theme(axis.text.x = element_text(angle = 90, vjust = .5))
+#'
 #' @export
 geom_xsidedensity <- function(mapping = NULL, data = NULL,
          stat = "density", position = "identity",
@@ -20,6 +34,7 @@ geom_xsidedensity <- function(mapping = NULL, data = NULL,
          show.legend = NA,
          inherit.aes = TRUE,
          outline.type = "upper") {
+  mapping <- default_stat_aes(mapping, stat, orientation)
   outline.type <- match.arg(outline.type, c("both", "upper", "lower", "full"))
   l <- layer(
     data = data,
@@ -73,6 +88,7 @@ geom_ysidedensity <- function(mapping = NULL, data = NULL,
                               show.legend = NA,
                               inherit.aes = TRUE,
                               outline.type = "upper") {
+  mapping <- default_stat_aes(mapping, stat, orientation)
   outline.type <- match.arg(outline.type, c("both", "upper", "lower", "full"))
   l <- layer(
     data = data,
@@ -112,7 +128,6 @@ GeomYsidedensity <- ggplot2::ggproto("GeomYsidedensity",
                                                                        flipped_aes = flipped_aes, outline.type = outline.type)
                                      },
                                      draw_key = function(data, params, size) {
-                                       #browser()
                                        data <- use_yside_aes(data)
                                        ggplot2::GeomDensity$draw_key(data, params, size)
                                      })

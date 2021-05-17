@@ -33,6 +33,21 @@
 #' @seealso [geom_xsidehistogram], [geom_ysidehistogram]
 #' @return XLayer or YLayer object to be added to a ggplot object
 #' @aliases geom_*sidebar
+#' @examples
+#'
+#' p <-ggplot(iris, aes(Sepal.Width, Sepal.Length, color = Species, fill = Species)) +
+#' geom_point()
+#'
+#' #sidebar - uses StatCount
+#' p +
+#' geom_xsidebar() +
+#' geom_ysidebar()
+#'
+#' #sidecol - uses Global mapping
+#' p +
+#'   geom_xsidecol() +
+#'   geom_ysidecol()
+#'
 #' @export
 geom_xsidebar <- function(mapping = NULL, data = NULL,
                           stat = "count", position = "stack",
@@ -42,6 +57,7 @@ geom_xsidebar <- function(mapping = NULL, data = NULL,
                           orientation = "x",
                           show.legend = NA,
                           inherit.aes = TRUE) {
+  mapping <- default_stat_aes(mapping, stat, orientation)
   l <- layer(
     data = data,
     mapping = mapping,
@@ -95,6 +111,7 @@ geom_ysidebar <- function(mapping = NULL, data = NULL,
                           orientation = "y",
                           show.legend = NA,
                           inherit.aes = TRUE) {
+  mapping <- default_stat_aes(mapping, stat, orientation)
   l <- layer(
     data = data,
     mapping = mapping,

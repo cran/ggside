@@ -104,7 +104,7 @@ ggplot(summariseDiamond, aes(x = color, y = `Cut Clarity`)) +
   scale_yfill_gradient(low ="#FFFFFF", high = "#0000FF") 
 ```
 
-Unfortunately using `xfill` or `yfill` with `geom_xsidetile` or `geom_ysidetile` respecitively will lock its associated scale with the first layer. So you cannot first assign `yfill` to a discrete scale and then add a layer with `yfill` maps to a continuous variable or vise a versa. For example, the following code still produces an error. This is largely due to the original motivation for making this package, but at least **ggside** can give some ease to plotting information to the sides of the main figure.
+Unfortunately using `xfill` or `yfill` with `geom_xsidetile` or `geom_ysidetile` respectively will lock its associated scale with the first layer. So you cannot first assign `yfill` to a discrete scale and then add a layer with `yfill` maps to a continuous variable or vise a versa. For example, the following code still produces an error. This is largely due to the original motivation for making this package, but at least **ggside** can give some ease to plotting information to the sides of the main figure.
 
 ```{r, error=T}
 p <- ggplot(summariseDiamond, aes(x = color, y = `Cut Clarity`)) +
@@ -124,7 +124,7 @@ error = function(err){
 # How to Use
 ## Geom
 
-`geom_xside*` and `geom_yside*` both extend the `ggplot2::Geom*` environments. As you may expect, `geom_xside*` allows you to place geometries along the x-axis and `geom_yside*` allows placement along the y-axis. All of the `geom_*side*` functions provide a variation on the color aesthetics `colour`/`fill`. The variants are named `xcolour` and `xfill` or `ycolour` and `yfill` for their respective `xside` or `yside` geoms. These aesthetics will take precidence over their more general counterpart if assigned. This allows for certain geoms to be plotted on different color scales - particularly useful when one requires a discrete scale and another requires a discrete scale.
+`geom_xside*` and `geom_yside*` both extend the `ggplot2::Geom*` environments. As you may expect, `geom_xside*` allows you to place geometries along the x-axis and `geom_yside*` allows placement along the y-axis. All of the `geom_*side*` functions provide a variation on the color aesthetics `colour`/`fill`. The variants are named `xcolour` and `xfill` or `ycolour` and `yfill` for their respective `xside` or `yside` geoms. These aesthetics will take precedence over their more general counterpart if assigned. This allows for certain geoms to be plotted on different color scales - particularly useful when one requires a discrete scale and another requires a discrete scale.
 
 ### Available Geoms
 
@@ -144,15 +144,19 @@ The following geoms are currently available to use right away from the `ggside` 
 
 ## Facets
 
-Techniquely speaking `ggside`'s main workhorse is *hacking* `Facet` framework. Whenever a standard `ggplot` object is converted to a `ggside` object, the current `Facet ggproto` class is replaced to one that is compatible with `ggside`. All `geom*side` variants are plotted in a panel adjacent to the axis their name implies. All vinila `ggplot2` geometries are plotted in the main panel.
+Technically speaking `ggside`'s main workhorse is *hacking* `Facet` framework. Whenever a standard `ggplot` object is converted to a `ggside` object, the current `Facet ggproto` class is replaced to one that is compatible with `ggside`. All `geom*side` variants are plotted in a panel adjacent to the axis their name implies. All vanilla `ggplot2` geometries are plotted in the main panel.
 
 ### How its done
 
 #### XLayer and YLayer
 Each `geom_*side*` variants function return an `XLayer` or `YLayer` which both extends `ggplot2:::Layer`. Currently, only `Layer$setup_layer` is overwritten to add column `PANEL_TYPE` to the data. This column will contain `"x"`, or `"y"` which will help map data to the correct panel. Data missing the `PANEL_TYPE` column (or containing values other than `"x"` or `"y"`) is assumed to be mapped to the main panel. The values in `PANEL_TYPE` help predict which extra panels needed to be drawn per main panel produced by the original `Facet` class the ggplot holds.
+
 #### Facet
+
 Three main methods are overwritten in order to make `ggside` work. `compute_layout`, `map_data`, and `draw_panels`. The `compute_layout` will first call the base Facet's method, and then will will build more panels based on the attached `ggside` object. `map_data` will take extra care to ensure data is mapped to the proper panel using `PANEL_TYPE` as well as any other facet variables passed. `draw_panels` which is responsible for rendering all panels correctly.
+
 #### Extending
+
  Currently, `ggside` works with `ggplot2`'s three base facet classes, `FacetNull`, `FacetWrap` and `FacetGrid`. If you wish to extend `ggside` to another package's custom facet function, then you must also export a `as_ggsideFacet` S3 method, which will be called when an the `ggplot` is converted to `ggside` or whenever a new facet is added to the plot. This method should return a ggproto object that inherits from the `Facet` group. Helpful computed variables in the `layout` object are `PANEL_TYPE` which indicates if the `PANEL` expects a side geom or default geom, and `PANEL_GROUP` which helps clarify which `PANEL`'s are grouped together in a facet. These additional computed variables and the `ggside` object passed to `params` will have the information needed to help you draw panels for you custom facet with `ggside`.
 
 ### Examples with Facets
@@ -225,9 +229,9 @@ p + geom_xsidedensity(aes(y=stat(density), xfill = Species), position = "stack")
 ```
 
 
-Note that when collapsing panels on `FacetGrid`, the panels apear under the strips whereas on `FacetWrap` they appear above the strips. This is because `FacetWrap`, collapsing panels in the same column or row may not share the same facet variable, which would be confusing since the strip would not represent the data entirely. This is not the case with `FacetGrid` since each row or column is dictated by the facet variable.
+Note that when collapsing panels on `FacetGrid`, the panels appear under the strips whereas on `FacetWrap` they appear above the strips. This is because `FacetWrap`, collapsing panels in the same column or row may not share the same facet variable, which would be confusing since the strip would not represent the data entirely. This is not the case with `FacetGrid` since each row or column is dictated by the facet variable.
 
-Collaping on an x or y coerces all panels in that column or row to the same scale, thus `scales = "free_x"` is uncompatible with `collapse = "x"`.
+Collapsing on an x or y coerces all panels in that column or row to the same scale, thus `scales = "free_x"` is incompatible with `collapse = "x"`.
 
 ```{r}
 p2 + facet_wrap(Species~Species2, scales = "free") +
@@ -244,3 +248,34 @@ p2 + facet_grid(Species~Species2, space = "free", scales = "free") +
   theme(ggside.panel.scale.x = .4,
         ggside.panel.scale.y = .25)
 ```
+
+
+# Specifying ggside Axes
+
+As of `ggside (>= 0.1.0)` you can now have further control over how a side axis will render. For example, when making a `xside` geometry, the x-axis was shared with the main panel so you can specify how the x-axis is rendered via the `scale_x_*` functions. Prior to `ggside (>= 0.1.0)` you had no control over the y-axis of the xside panel. Now, you can use `scale_xsidey_(continuous|discrete)` functions to further specify this scale. Similarly, you can do this for the x-axis of a `yside` panel with `scale_ysidex_(continuous|discrete)` functions. For all intents and purposes, these are identical to the `scale_(x|y)_*` functions but they only affect their `xside` or `yside` panel's non-shared axis. 
+
+Additionally, this allows you to mix continuous and discrete scales on the same y or x axis. For example the main panel y axis may be continuous and the side panel y axis may be discrete. Take the following example that was not possible prior to this version:
+
+```{r error=TRUE}
+ggplot(mpg, aes(displ, hwy, colour = class)) + 
+  geom_point(size = 2) +
+  geom_xsideboxplot(aes(y =class), orientation = "y") +
+  geom_ysidedensity(aes(x = after_stat(density)), position = "stack") +
+  theme(ggside.panel.scale = .3)
+```
+
+Now we can provide the plot with the proper scale the panel will expect. You can use the `guide` argument of these new scale functions to further customize how the text is rendered, the `breaks` argument to control the location or visibility of the tick marks.
+
+```{r}
+ggplot(mpg, aes(displ, hwy, colour = class)) + 
+  geom_point(size = 2) +
+  geom_xsideboxplot(aes(y =class), orientation = "y") +
+  geom_ysidedensity(aes(x = after_stat(density)), position = "stack") +
+  theme(ggside.panel.scale = .3) +
+  scale_xsidey_discrete() +
+  scale_ysidex_continuous(guide = guide_axis(angle = 90), minor_breaks = NULL) 
+```
+
+
+
+

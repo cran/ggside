@@ -147,3 +147,19 @@ p2 + facet_grid(Species~Species2, space = "free", scales = "free") +
   theme(ggside.panel.scale.x = .4,
         ggside.panel.scale.y = .25)
 
+## ----error=TRUE---------------------------------------------------------------
+ggplot(mpg, aes(displ, hwy, colour = class)) + 
+  geom_point(size = 2) +
+  geom_xsideboxplot(aes(y =class), orientation = "y") +
+  geom_ysidedensity(aes(x = after_stat(density)), position = "stack") +
+  theme(ggside.panel.scale = .3)
+
+## -----------------------------------------------------------------------------
+ggplot(mpg, aes(displ, hwy, colour = class)) + 
+  geom_point(size = 2) +
+  geom_xsideboxplot(aes(y =class), orientation = "y") +
+  geom_ysidedensity(aes(x = after_stat(density)), position = "stack") +
+  theme(ggside.panel.scale = .3) +
+  scale_xsidey_discrete() +
+  scale_ysidex_continuous(guide = guide_axis(angle = 90), minor_breaks = NULL) 
+

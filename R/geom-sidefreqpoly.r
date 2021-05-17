@@ -7,14 +7,19 @@
 #'
 #' @aliases geom_*freqpoly
 #' @return XLayer or YLayer object to be added to a ggplot object
+#' @examples
+#'  ggplot(diamonds, aes(price, carat, colour = cut)) +
+#'    geom_point() +
+#'    geom_xsidefreqpoly(aes(y=after_stat(count)),binwidth = 500) +
+#'    geom_ysidefreqpoly(aes(x=after_stat(count)),binwidth = .2)
 #' @export
 geom_xsidefreqpoly <- function(mapping = NULL, data = NULL,
-                               stat = "xsidebin", position = "identity",
+                               stat = "bin", position = "identity",
                                ...,
                                na.rm = FALSE,
                                show.legend = NA,
                                inherit.aes = TRUE) {
-
+  mapping <- default_stat_aes(mapping, stat, "x")
   params <- list(na.rm = na.rm, ...)
   if (identical(stat, "bin")) {
     params$pad <- TRUE
@@ -38,12 +43,12 @@ geom_xsidefreqpoly <- function(mapping = NULL, data = NULL,
 #' @rdname geom_xsidefreqpoly
 #' @export
 geom_ysidefreqpoly <- function(mapping = NULL, data = NULL,
-                               stat = "ysidebin", position = "identity",
+                               stat = "bin", position = "identity",
                                ...,
                                na.rm = FALSE,
                                show.legend = NA,
                                inherit.aes = TRUE) {
-
+  mapping <- default_stat_aes(mapping, stat, "y")
   params <- list(na.rm = na.rm, ...)
   if (identical(stat, "bin")) {
     params$pad <- TRUE

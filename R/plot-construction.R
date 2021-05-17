@@ -1,7 +1,6 @@
 
 
-#' @export
-#' @return A modified ggplot object
+
 ggplot_add.ggside_layer <- function(object, plot, object_name){
   plot <- NextMethod("ggplot_add")
   as_ggside(plot)
@@ -9,6 +8,12 @@ ggplot_add.ggside_layer <- function(object, plot, object_name){
 
 ggplot_add.ggside_options <- function(object, plot, object_name){
   as_ggside(plot, object)
+}
+
+ggplot_add.ggside_scale <- function(object, plot, object_name){
+  ggside <- plot$ggside %||% ggside() #get current ggside object, or make a new one
+  ggside[[intersect(c("xsidey","ysidex"), object$aesthetics)]] <- object #save scale in appropriate place
+  as_ggside(plot, ggside) #return ggside
 }
 
 as_ggside <- function(plot, ggside = NULL){
@@ -45,6 +50,8 @@ make_ggside <- function(object, ggside){
   }
   object$ggside$sides_used <- get_sides(object[["layers"]])
   object$ggside$collapse <- ggside$collapse %||% object$ggside$collapse %||% NULL
+  object$ggside$xsidey <- ggside$xsidey %||% object$ggside$xsidey %||% NULL
+  object$ggside$ysidex <- ggside$ysidex %||% object$ggside$ysidex %||% NULL
   return(object)
 }
 
