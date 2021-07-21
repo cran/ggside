@@ -1,7 +1,7 @@
 Package: ggside
 Type: Package
 Title: Side Grammar Graphics
-Version: 0.1.1
+Version: 0.1.2
 Authors@R: 
     person(given = "Justin",
            family = "Landis",
@@ -22,8 +22,9 @@ Depends: ggplot2 (>= 3.0.0)
 Imports: grid, gtable, rlang, scales, glue, stats
 Suggests: tidyr, dplyr, testthat (>= 3.0.3), knitr, rmarkdown, vdiffr
         (>= 1.0.0), ggdendro, viridis
+Config/testthat/edition: 3
 NeedsCompilation: no
-Packaged: 2021-07-20 14:01:59 UTC; jtlandis
+Packaged: 2021-07-21 00:35:52 UTC; jtlandis
 Author: Justin Landis [aut, cre]
 Repository: CRAN
-Date/Publication: 2021-07-20 16:00:02 UTC
+Date/Publication: 2021-07-21 09:00:08 UTC

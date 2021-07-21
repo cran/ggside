@@ -83,3 +83,13 @@ for more information.
 
 If you find any issues or want to suggest an enhancement, please make a
 post at [jtlandis/ggside](https://github.com/jtlandis/ggside/issues).
+
+## Known Issues
+
+The following section will summarize issues that are present on the
+current CRAN release. These will either be fixed on the master branch of
+this git repository, or currently in development to be fixed on one of
+the development branches. The current CRAN version of `ggside` is
+v0.1.2.
+
+-   There are no none issues yet.
