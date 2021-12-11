@@ -1,4 +1,4 @@
-## ---- include = FALSE---------------------------------------------------------
+## ----knitr_setup, include = FALSE---------------------------------------------
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
@@ -10,7 +10,7 @@ knitr::opts_chunk$set(
 ## ----setup--------------------------------------------------------------------
 library(ggside)
 
-## -----------------------------------------------------------------------------
+## ----ggplot_readme_example----------------------------------------------------
 p <- ggplot(mpg, aes(displ, hwy, colour = class)) +
   geom_point(size = 2) +
   theme_bw()
@@ -45,32 +45,28 @@ geom_xsidedensity_legacy <- function(mapping = NULL, data = NULL,
   structure(l, class = c("ggside_layer",class(l)))
 }
 
-## ---- error=T-----------------------------------------------------------------
-#geom_xsidedensity_legacy is not exported with new versions of `ggside`
-p_error <- p + geom_xsidedensity_legacy()
+## ----error_plot, eval = F-----------------------------------------------------
+#  #geom_xsidedensity_legacy is not exported with new versions of `ggside`
+#  p_error <- p + geom_xsidedensity_legacy()
+#  
+#  p_error
+#  
 
-tryCatch({
-  p_error
-  },
-  error = function(e) e
-)
-
-
-## -----------------------------------------------------------------------------
+## ----ggside_legacy_example----------------------------------------------------
 p + geom_xsidedensity_legacy(aes(y = after_stat(density)))
 
-## -----------------------------------------------------------------------------
+## ----ggside_updated_aes_usage-------------------------------------------------
 p + 
   geom_xsidedensity() +
   geom_ysidedensity()
 
-## -----------------------------------------------------------------------------
+## ----ggside_aes_stats---------------------------------------------------------
 p + 
   geom_xsidedensity(aes(y = after_stat(count))) +
   geom_ysidedensity(aes(x = after_stat(scaled)))
 
-## -----------------------------------------------------------------------------
+## ----ggside_off_usage_example-------------------------------------------------
 #
 p + 
-  geom_xsidedensity(orientation = "y") #just use geom_ysidedensity()  ¯\_(ツ)_/¯
+  geom_xsidedensity(orientation = "y") #just use geom_ysidedensity() 
 

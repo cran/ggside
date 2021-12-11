@@ -1,14 +1,14 @@
 README
 ================
 Justin Landis
-7/17/2021
+12/11/2021
 
 # ggside <img src="inst/figures/ggside.png" align="right" height="279" />
 
 <!-- badges: start -->
 
 [![Travis build
-status](https://travis-ci.org/jtlandis/ggside.svg?branch=main)](https://travis-ci.org/jtlandis/ggside)
+status](https://travis-ci.org/jtlandis/ggside.svg?branch=master)](https://travis-ci.org/jtlandis/ggside)
 [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version-ago/ggside)](https://cran.r-project.org/package=ggside)
 [![CRAN\_Download\_Badge](http://cranlogs.r-pkg.org/badges/ggside)](https://cran.r-project.org/package=ggside)
 [![CRAN\_Download\_Badge](http://cranlogs.r-pkg.org/badges/grand-total/ggside)](https://cran.r-project.org/package=ggside)
@@ -76,6 +76,25 @@ ggplot(mpg, aes(displ, hwy, colour = class)) +
 
 ![](man/figures/README-example-mix-scales-1.png)<!-- -->
 
+With version 0.2.0, more theme elements allow for better control over
+how side panels are rendered.
+
+``` r
+ggplot(iris, aes(Sepal.Width, Sepal.Length, fill = Species)) +
+  geom_point(aes(color = Species)) +
+  geom_xsidedensity(alpha = .3, position = "stack") +
+  geom_ysideboxplot(aes(x = Species), orientation = "x") +
+  scale_ysidex_discrete(guide = guide_axis(angle = 45)) +
+  theme_dark() +
+  theme(ggside.panel.scale = .3,
+        ggside.panel.border = element_rect(NA, "red", size = 2),
+        ggside.panel.grid = element_line("black", size = .1, linetype = "dotted"),
+        ggside.panel.background = element_blank()) +
+  guides(color = "none", fill = "none")
+```
+
+![](man/figures/README-example-side-themes-1.png)<!-- -->
+
 For a more detailed guide please see `vignette('ggside_basic_usage')`
 for more information.
 
@@ -90,6 +109,6 @@ The following section will summarize issues that are present on the
 current CRAN release. These will either be fixed on the main branch of
 this git repository, or currently in development to be fixed on one of
 the development branches. The current CRAN version of `ggside` is
-v0.1.3.
+v0.2.0.
 
 No Known Issues

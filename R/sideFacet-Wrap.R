@@ -63,6 +63,7 @@ sideFacetWrap_draw_panels <- function(panels, layout, x_scales, y_scales, ranges
   side_panels_present <- c("x","y")[c("x","y")%in%layout$PANEL_TYPE]
   x.pos <- params$ggside$x.pos
   y.pos <- params$ggside$y.pos
+  ranges <- map_panel_type(ranges, layout$PANEL_TYPE)
 
   axes <- render_axes(ranges, ranges, coord, theme, transpose = TRUE)
 
@@ -84,7 +85,7 @@ sideFacetWrap_draw_panels <- function(panels, layout, x_scales, y_scales, ranges
   # ask the coordinate system if it wants to specify one
   aspect_ratio <- theme$aspect.ratio
   if (is.null(aspect_ratio) && !params$free$x && !params$free$y) {
-    aspect_ratio <- coord$aspect(ranges[[1]])
+    aspect_ratio <- coord$aspect(ranges[[layout[layout$PANEL_TYPE=="main",]$PANEL[1L]]])
   }
 
   if (is.null(aspect_ratio)) {
@@ -94,8 +95,8 @@ sideFacetWrap_draw_panels <- function(panels, layout, x_scales, y_scales, ranges
     respect <- TRUE
   }
   #theme side panel scale
-  side.panel.scale.x <- theme$ggside.panel.scale.x %||% theme$ggside.panel.scale %||% .1
-  side.panel.scale.y <- theme$ggside.panel.scale.y %||% theme$ggside.panel.scale %||% .1
+  side.panel.scale.x <- calc_element("ggside.panel.scale.x", theme)
+  side.panel.scale.y <- calc_element("ggside.panel.scale.y", theme)
 
   empty_table <- matrix(list(zeroGrob()), nrow = nrow, ncol = ncol)
   panel_table <- empty_table
@@ -144,11 +145,10 @@ sideFacetWrap_draw_panels <- function(panels, layout, x_scales, y_scales, ranges
   panel_table$layout$name <- paste0('panel-', rep(seq_len(ncol), nrow), '-', rep(seq_len(nrow), each = ncol))
 
   #need to register theme element
-  sidepanel.spacing <- theme$ggside.panel.spacing %||% theme$panel.spacing
-  sidepanel.spacing.x <- theme$ggside.panel.spacing.x %||% sidepanel.spacing
-  xpanel_spacing <- theme$panel.spacing.x %||% theme$panel.spacing
-  sidepanel.spacing.y <- theme$ggside.panel.spacing.y %||% sidepanel.spacing
-  ypanel_spacing <- theme$panel.spacing.y %||% theme$panel.spacing
+  sidepanel.spacing.x <- calc_element("ggside.panel.spacing.x", theme)
+  xpanel_spacing <- calc_element("panel.spacing.x", theme)
+  sidepanel.spacing.y <- calc_element("ggside.panel.spacing.y", theme)
+  ypanel_spacing <- calc_element("panel.spacing.y", theme)
   col.widths <- if("y"%in%side_panels_present){
     if(collapse_y){
       .tmp <- rep(c(xpanel_spacing), length(panel_table$widths)-2)
@@ -196,13 +196,33 @@ sideFacetWrap_draw_panels <- function(panels, layout, x_scales, y_scales, ranges
   .x <- if("PANEL_GROUP" %in% .ygroupby) "x" else NULL
 
   bottom <- do_by(layout[!layout[["PANEL_TYPE"]]%in%.y,], .xgroupby,
-                  function(x){x[["ROW2"]] <- max(x[["ROW"]]);x})
+                  function(x, on){
+    x[["ROW2"]] <- switch(on,
+                          default = max(x[["ROW"]]),
+                          main = max(x[["ROW"]][x[["PANEL_TYPE"]]!="x"]),
+                          side = max(x[["ROW"]][x[["PANEL_TYPE"]]!="main"]))
+    x}, on = params$ggside$draw_x_on)
   top <- do_by(layout[!layout[["PANEL_TYPE"]]%in%.y,], .xgroupby,
-               function(x){x[["ROW2"]] <- min(x[["ROW"]]);x})
+               function(x, on){
+    x[["ROW2"]] <- switch(on,
+                          default = min(x[["ROW"]]),
+                          main = min(x[["ROW"]][x[["PANEL_TYPE"]]!="x"]),
+                          side = min(x[["ROW"]][x[["PANEL_TYPE"]]!="main"]))
+    x}, on = params$ggside$draw_x_on)
   right <- do_by(layout[!layout[["PANEL_TYPE"]]%in%.x,], .ygroupby,
-                 function(x){x[["COL2"]] <- max(x[["COL"]]);x})
+                 function(x, on){
+    x[["COL2"]] <- switch(on,
+                          default = max(x[["COL"]]),
+                          main = max(x[["COL"]][!x[["PANEL_TYPE"]]=="y"]),
+                          side = max(x[["COL"]][!x[["PANEL_TYPE"]]=="main"]))
+    x}, on = params$ggside$draw_y_on)
   left <- do_by(layout[!layout[["PANEL_TYPE"]]%in%.x,], .ygroupby,
-                function(x){x[["COL2"]] <- min(x[["COL"]]);x})
+                function(x, on){
+    x[["COL2"]] <- switch(on,
+                          default = min(x[["COL"]]),
+                          main = min(x[["COL"]][!x[["PANEL_TYPE"]]=="y"]),
+                          side = min(x[["COL"]][!x[["PANEL_TYPE"]]=="main"]))
+    x}, on = params$ggside$draw_y_on)
 
   if(params$ggside$scales%in%c("free","free_y")){ #if y is free, include x PANELS_TYPES
     right <- right[right[["COL"]]==right[["COL2"]]|right[["PANEL_TYPE"]]=="x",]
