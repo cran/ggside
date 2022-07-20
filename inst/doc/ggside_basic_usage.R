@@ -67,7 +67,7 @@ ggplot(summariseDiamond, aes(x = color, y = `Cut Clarity`)) +
   geom_ysidetile(data = .tmp, aes(x = key, yfill = value)) +
   scale_yfill_gradient(low ="#FFFFFF", high = "#0000FF") 
 
-## ----error_plot2, eval = F----------------------------------------------------
+## ----error_plot2, eval = FALSE------------------------------------------------
 #  p <- ggplot(summariseDiamond, aes(x = color, y = `Cut Clarity`)) +
 #    geom_tile(aes(fill = `mean Price`)) +
 #    geom_ysidetile(aes(yfill = `sd of means`)) + #sets yfill to a continuous scale

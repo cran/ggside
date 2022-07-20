@@ -49,6 +49,11 @@ sideFacetWrap_draw_panels <- function(panels, layout, x_scales, y_scales, ranges
     }
   }
   #browser()
+  if (params$ggside$strip!="default") {
+    warn("`ggside(strip = 'main', ...)` is only compatible with `facet_grid(...)`, not `facet_wrap(...)`",
+         .frequency = "regularly",
+         .frequency_id = "ggside_strip_misuse_wrap")
+  }
   collapse <- params$ggside$collapse %||% "default"
   collapse_y <- collapse %in% c("all","y")
   collapse_x <- collapse %in% c("all","x")
@@ -391,6 +396,33 @@ FacetSideWrap <- ggplot2::ggproto("FacetSideWrap",
                                     }
                                     scales
                                   },
-                                  map_data = map_data_ggside,
+                                  map_data = function (data, layout, params)
+                                  {
+                                    if (empty(data)) {
+                                      return(cbind(data, PANEL = integer(0)))
+                                    }
+                                    prep_map_data(layout, data)
+                                    vars <- c(params$facets, PANEL_TYPE = quo(PANEL_TYPE))
+                                    if (length(vars) == 0) {
+                                      data$PANEL <- layout$PANEL
+                                      return(data)
+                                    }
+
+                                    facet_vals <- eval_facets(vars, data, params$.possible_columns)
+                                    facet_vals[] <- lapply(facet_vals[], as.factor)
+                                    missing_facets <- setdiff(names(vars), names(facet_vals))
+                                    if (length(missing_facets) > 0) {
+                                      to_add <- unique(layout[missing_facets])
+                                      data_rep <- rep.int(1:nrow(data), nrow(to_add))
+                                      facet_rep <- rep(1:nrow(to_add), each = nrow(data))
+                                      data <- unrowname(data[data_rep, , drop = FALSE])
+                                      facet_vals <- unrowname(cbind(facet_vals[data_rep, ,
+                                                                               drop = FALSE], to_add[facet_rep, , drop = FALSE]))
+                                    }
+
+                                    keys <- join_keys(facet_vals, layout, by = names(vars))
+                                    data$PANEL <- layout$PANEL[match(keys$x, keys$y)]
+                                    data
+                                  },
                                   draw_panels = sideFacetWrap_draw_panels
 )

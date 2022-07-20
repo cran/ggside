@@ -1,17 +1,16 @@
 README
 ================
 Justin Landis
-12/11/2021
+07/20/2022
 
 # ggside <img src="inst/figures/ggside.png" align="right" height="279" />
 
 <!-- badges: start -->
 
-[![Travis build
-status](https://travis-ci.org/jtlandis/ggside.svg?branch=master)](https://travis-ci.org/jtlandis/ggside)
-[![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version-ago/ggside)](https://cran.r-project.org/package=ggside)
-[![CRAN\_Download\_Badge](http://cranlogs.r-pkg.org/badges/ggside)](https://cran.r-project.org/package=ggside)
-[![CRAN\_Download\_Badge](http://cranlogs.r-pkg.org/badges/grand-total/ggside)](https://cran.r-project.org/package=ggside)
+[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version-ago/ggside)](https://cran.r-project.org/package=ggside)
+[![CRAN_Download_Badge](http://cranlogs.r-pkg.org/badges/ggside)](https://cran.r-project.org/package=ggside)
+[![CRAN_Download_Badge](http://cranlogs.r-pkg.org/badges/grand-total/ggside)](https://cran.r-project.org/package=ggside)
+[![R-CMD-check](https://github.com/jtlandis/ggside/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/jtlandis/ggside/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 ## Overview
@@ -109,6 +108,4 @@ The following section will summarize issues that are present on the
 current CRAN release. These will either be fixed on the main branch of
 this git repository, or currently in development to be fixed on one of
 the development branches. The current CRAN version of `ggside` is
-v0.2.0.
-
-No Known Issues
+v0.2.1.

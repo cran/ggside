@@ -274,7 +274,7 @@ sideFacetGrid_draw_panels <- function(panels, layout, x_scales, y_scales, ranges
   panel_table <- weave_tables_row(panel_table, axis_mat_x_bottom, 0, axis_height_bottom, "axis-b", 3)
   panel_table <- weave_tables_col(panel_table, axis_mat_y_left, -1, axis_width_left, "axis-l", 3)
   panel_table <- weave_tables_col(panel_table, axis_mat_y_right, 0, axis_width_right, "axis-r", 3)
-  #browser()
+
   #By default strip.positions are top and right. if switch == "both" set to bottom and left
   strip.position <- params$switch %||% "default"
   strip.position <- switch(strip.position,
@@ -282,7 +282,12 @@ sideFacetGrid_draw_panels <- function(panels, layout, x_scales, y_scales, ranges
                            x = c("bottom","right"), y = c("top", "left"))
   vertical.strip <- c("top","bottom")[c("top","bottom")%in% strip.position]
   horizont.strip <- c("left","right")[c("left","right")%in% strip.position]
-  Vstrip_panel_pos <- unique(do_by(layout, "COL",
+  Vstrip_panel_pos <- if (params$ggside$strip!="default") {
+    layout[layout$PANEL_TYPE=="main",]
+  } else {
+    layout
+  }
+  Vstrip_panel_pos <- unique(do_by(Vstrip_panel_pos, "COL",
                             function(x, vstrip){
                               if(vstrip=="top"){
                                 x[["ROW"]] <- min(x[["ROW"]])
@@ -294,8 +299,13 @@ sideFacetGrid_draw_panels <- function(panels, layout, x_scales, y_scales, ranges
   Vstrip_panel_pos <- semi_join(layout, Vstrip_panel_pos, by = c("COL","ROW"))
   Vstrip_panel_pos <- unique(Vstrip_panel_pos[!Vstrip_panel_pos[["PANEL_TYPE"]]=="y",c("PANEL","panel_pos")])
 
+  Hstrip_panel_pos <- if (params$ggside$strip!="default") {
+    layout[layout$PANEL_TYPE=="main",]
+  } else {
+    layout
+  }
   Hstrip_panel_pos <- unique(
-    do_by(layout, "ROW",
+    do_by(Hstrip_panel_pos, "ROW",
           function(x, hstrip){
             if(hstrip=="left"){
               x[["COL"]] <- min(x[["COL"]])
@@ -380,6 +390,42 @@ FacetSideGrid <- ggplot2::ggproto("FacetSideGrid",
                                     }
                                     scales
                                   },
-                                  map_data = map_data_ggside,
+                                  map_data = function (data, layout, params)
+                                  {
+                                    if (empty(data)) {
+                                      return(cbind(data, PANEL = integer(0)))
+                                    }
+                                    rows <- params$rows
+                                    cols <- params$cols
+                                    vars <- c(names(rows), names(cols), "PANEL_TYPE")
+                                    prep_map_data(layout, data)
+                                    if (length(vars) == 0) {
+                                      data$PANEL <- layout$PANEL
+                                      return(data)
+                                    }
+                                    margin_vars <- list(intersect(names(rows), names(data)),
+                                                        intersect(names(cols), names(data)))
+                                    data <- reshape_add_margins(data, margin_vars, params$margins)
+                                    facet_vals <- eval_facets(c(rows, cols, PANEL_TYPE = quo(PANEL_TYPE)), data, params$.possible_columns)
+                                    missing_facets <- setdiff(vars, names(facet_vals))
+                                    if (length(missing_facets) > 0) {
+                                      to_add <- unique(layout[missing_facets])
+                                      data_rep <- rep.int(1:nrow(data), nrow(to_add))
+                                      facet_rep <- rep(1:nrow(to_add), each = nrow(data))
+                                      data <- unrowname(data[data_rep, , drop = FALSE])
+                                      facet_vals <- unrowname(cbind(facet_vals[data_rep, ,
+                                                                               drop = FALSE], to_add[facet_rep, , drop = FALSE]))
+                                    }
+                                    if (nrow(facet_vals) == 0) {
+                                      data$PANEL <- NO_PANEL
+                                    }
+                                    else {
+                                      facet_vals[] <- lapply(facet_vals[], as.factor)
+                                      facet_vals[] <- lapply(facet_vals[], addNA, ifany = TRUE)
+                                      keys <- join_keys(facet_vals, layout, by = vars)
+                                      data$PANEL <- layout$PANEL[match(keys$x, keys$y)]
+                                    }
+                                    data
+                                  },
                                   draw_panels = sideFacetGrid_draw_panels
 )

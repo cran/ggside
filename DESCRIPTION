@@ -1,12 +1,13 @@
 Package: ggside
 Type: Package
 Title: Side Grammar Graphics
-Version: 0.2.0
+Version: 0.2.1
 Authors@R: 
     person(given = "Justin",
            family = "Landis",
            role = c("aut", "cre"),
-           email = "jtlandis314@gmail.com")
+           email = "jtlandis314@gmail.com",
+           comment = c(ORCID = "0000-0001-5501-4934"))
 Maintainer: Justin Landis <jtlandis314@gmail.com>
 Description: The grammar of graphics as shown in 'ggplot2' has provided
   an expressive API for users to build plots. 'ggside' extends 'ggplot2' 
@@ -15,16 +16,18 @@ Description: The grammar of graphics as shown in 'ggplot2' has provided
   particularly useful for visualizing metadata on a discrete axis, or summary
   graphics on a continuous axis such as a boxplot or a density distribution.
 License: MIT + file LICENSE
+URL: https://github.com/jtlandis/ggside
+BugReports: https://github.com/jtlandis/ggside/issues
 Encoding: UTF-8
-RoxygenNote: 7.1.2
-VignetteBuilder: knitr, rmarkdown
+RoxygenNote: 7.2.1
+VignetteBuilder: knitr
 Depends: ggplot2 (>= 3.0.0)
-Imports: grid, gtable, rlang, scales, glue, stats
+Imports: grid, gtable, rlang, scales, glue, stats, tibble
 Suggests: tidyr, dplyr, testthat (>= 3.0.3), knitr, rmarkdown, vdiffr
         (>= 1.0.0), ggdendro, viridis
 Config/testthat/edition: 3
 NeedsCompilation: no
-Packaged: 2021-12-11 07:04:20 UTC; jtlandis
-Author: Justin Landis [aut, cre]
+Packaged: 2022-07-20 13:34:09 UTC; jtlandis
+Author: Justin Landis [aut, cre] (<https://orcid.org/0000-0001-5501-4934>)
 Repository: CRAN
-Date/Publication: 2021-12-11 19:30:20 UTC
+Date/Publication: 2022-07-20 14:10:02 UTC

@@ -11,6 +11,11 @@ sideFacetNull_draw_panels <- function(panels, layout, x_scales, y_scales,
   #     layout$SCALE_Y <- 1L
   #   }
   # }
+  if (params$ggside$strip!="default") {
+    warn("`ggside(strip = 'main', ...)` is only compatible with `facet_grid(...)`",
+         .frequency = "regularly",
+         .frequency_id = "ggside_strip_misuse_null")
+  }
   ncol <- max(layout$COL)
   nrow <- max(layout$ROW)
   n <- nrow(layout)
@@ -230,5 +235,15 @@ FacetSideNull <- ggplot2::ggproto("FacetSideNull",
                                     }
                                     scales
                                   },
-                                  map_data = map_data_ggside,
+                                  map_data = function (data, layout, params) {
+                                    if (is.waive(data))
+                                      return(new_data_frame(list(PANEL = factor())))
+                                    if (empty(data))
+                                      return(new_data_frame(c(data, list(PANEL = factor()))))
+
+                                    prep_map_data(layout, data)
+                                    keys <- join_keys(data, layout, by = "PANEL_TYPE")
+                                    data[["PANEL"]] <- layout[["PANEL"]][match(keys$x, keys$y)]
+                                    data
+                                  },
                                   draw_panels = sideFacetNull_draw_panels)
