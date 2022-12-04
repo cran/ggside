@@ -43,6 +43,7 @@ number of breaks given by the transformation.}
 \item \code{waiver()} for the default labels computed by the
 transformation object
 \item A character vector giving labels (must be same length as \code{breaks})
+\item An expression vector (must be the same length as breaks). See ?plotmath for details.
 \item A function that takes the breaks as input and returns labels
 as output. Also accepts rlang \link[rlang:as_function]{lambda} function
 notation.
@@ -98,6 +99,8 @@ transformation with \code{\link[scales:trans_new]{scales::trans_new()}}.}
 
 \item{position}{For position scales, The position of the axis.
 \code{left} or \code{right} for y axes, \code{top} or \code{bottom} for x axes.}
+
+\item{sec.axis}{\code{\link[ggplot2:sec_axis]{sec_axis()}} is used to specify a secondary axis.}
 }
 \value{
 ggside_scale object inheriting from ggplot2::ScaleContinuousPosition

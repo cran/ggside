@@ -1,7 +1,7 @@
 Package: ggside
 Type: Package
 Title: Side Grammar Graphics
-Version: 0.2.1
+Version: 0.2.2
 Authors@R: 
     person(given = "Justin",
            family = "Landis",
@@ -21,13 +21,13 @@ BugReports: https://github.com/jtlandis/ggside/issues
 Encoding: UTF-8
 RoxygenNote: 7.2.1
 VignetteBuilder: knitr
-Depends: ggplot2 (>= 3.0.0)
-Imports: grid, gtable, rlang, scales, glue, stats, tibble
+Depends: ggplot2 (>= 3.4.0)
+Imports: grid, gtable, rlang, scales, glue, stats, tibble, vctrs
 Suggests: tidyr, dplyr, testthat (>= 3.0.3), knitr, rmarkdown, vdiffr
         (>= 1.0.0), ggdendro, viridis
 Config/testthat/edition: 3
 NeedsCompilation: no
-Packaged: 2022-07-20 13:34:09 UTC; jtlandis
+Packaged: 2022-12-04 21:16:29 UTC; jtlandis
 Author: Justin Landis [aut, cre] (<https://orcid.org/0000-0001-5501-4934>)
 Repository: CRAN
-Date/Publication: 2022-07-20 14:10:02 UTC
+Date/Publication: 2022-12-04 22:30:02 UTC
