@@ -11,6 +11,8 @@ Justin Landis
 [![CRAN_Download_Badge](http://cranlogs.r-pkg.org/badges/ggside)](https://cran.r-project.org/package=ggside)
 [![CRAN_Download_Badge](http://cranlogs.r-pkg.org/badges/grand-total/ggside)](https://cran.r-project.org/package=ggside)
 [![R-CMD-check](https://github.com/jtlandis/ggside/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/jtlandis/ggside/actions/workflows/R-CMD-check.yaml)
+[![Codecov test
+coverage](https://codecov.io/gh/jtlandis/ggside/branch/main/graph/badge.svg)](https://app.codecov.io/gh/jtlandis/ggside?branch=main)
 <!-- badges: end -->
 
 ## Overview
@@ -60,14 +62,16 @@ ggplot(mpg, aes(displ, hwy, colour = class)) +
 
 ![](man/figures/README-example-1.png)<!-- -->
 
-Mix discrete and continuous axis with `scale_xsidey_*`/`scale_ysidex_*`.
+After version `0.3.0` you no longer **need** to use
+`scale_(y|x)side(x|y)_*()` to mix discrete and continuous axes. `ggside`
+geom’s have their default positional aesthetics `x` and `y` aesthetics
+to be prepended with `ysidex` and `xsidey` respectively under the hood.
+Now you may mix discrete and continuous axes with ease.
 
 ``` r
 ggplot(mpg, aes(displ, hwy, colour = class)) + 
   geom_point(size = 2) +
   geom_xsideboxplot(aes(y =class), orientation = "y") +
-  scale_xsidey_discrete() + #In order to use xsideboxplot with a main panel that uses
-  #continuous data, force y axis in xside panel to be discrete
   geom_ysidedensity(aes(x = after_stat(density)), position = "stack") +
   scale_ysidex_continuous(guide = guide_axis(angle = 90), minor_breaks = NULL) +
   theme(ggside.panel.scale = .3)
@@ -108,11 +112,4 @@ The following section will summarize issues that are present on the
 current CRAN release. These will either be fixed on the main branch of
 this git repository, or currently in development to be fixed on one of
 the development branches. The current CRAN version of `ggside` is
-v0.2.2.
-
-- [\#40
-  ![](https://img.shields.io/badge/fixed-dev-green.svg?style=flat-square)](https://github.com/jtlandis/ggside/issues/40)
-  Side scales cannot be reliably transformed. This is “fixed” under the
-  dev version of `ggside`, but the overall new approach in the
-  development branch is not in a place where I am comfortable to release
-  just yet. This will be added in `ggside 0.3.0`.
+v0.3.0.

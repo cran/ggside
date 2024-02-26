@@ -10,50 +10,10 @@ knitr::opts_chunk$set(
 ## ----setup--------------------------------------------------------------------
 library(ggside)
 
-## ----ggplot_readme_example----------------------------------------------------
+## -----------------------------------------------------------------------------
 p <- ggplot(mpg, aes(displ, hwy, colour = class)) +
-  geom_point(size = 2) +
-  theme_bw()
-p
-
-## ----legacy_example, echo= FALSE----------------------------------------------
-geom_xsidedensity_legacy <- function(mapping = NULL, data = NULL,
-         stat = "density", position = "identity",
-         ...,
-         na.rm = FALSE,
-         orientation = "x",
-         show.legend = NA,
-         inherit.aes = TRUE,
-         outline.type = "upper") {
-  outline.type <- match.arg(outline.type, c("both", "upper", "lower", "full"))
-  l <- layer(
-    data = data,
-    mapping = mapping,
-    stat = stat,
-    geom = ggside:::GeomXsidedensity,
-    position = position,
-    show.legend = show.legend,
-    inherit.aes = inherit.aes,
-    params = list(
-      na.rm = na.rm,
-      orientation = orientation,
-      outline.type = outline.type,
-      ...
-    ),
-    layer_class = ggside:::XLayer
-  )
-  structure(l, class = c("ggside_layer",class(l)))
-}
-
-## ----error_plot, eval = F-----------------------------------------------------
-#  #geom_xsidedensity_legacy is not exported with new versions of `ggside`
-#  p_error <- p + geom_xsidedensity_legacy()
-#  
-#  p_error
-#  
-
-## ----ggside_legacy_example----------------------------------------------------
-p + geom_xsidedensity_legacy(aes(y = after_stat(density)))
+   geom_point(size = 2) +
+   theme_bw()
 
 ## ----ggside_updated_aes_usage-------------------------------------------------
 p + 

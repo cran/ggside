@@ -83,15 +83,15 @@ p <- ggplot(i2, aes(Sepal.Width, Sepal.Length, color = Species)) +
   geom_point()
 
 ## ----base_example_FacetNull---------------------------------------------------
-p2 <- p + geom_xsidedensity(aes(y=stat(density))) +
-  geom_ysidedensity(aes(x=stat(density))) +
+p2 <- p + geom_xsidedensity(aes(y = after_stat(density))) +
+  geom_ysidedensity(aes(x = after_stat(density))) +
   theme_bw()
 p2 + labs(title = "FacetNull")
 
 ## ----base_example_FacetWrap---------------------------------------------------
 p2 + facet_wrap(Species~Species2) +
   labs(title = "FacetWrap") +
-  guides(guide_axis(check.overlap = T))
+  guides(x = guide_axis(check.overlap = T))
 
 ## ----base_example_FacetGrid---------------------------------------------------
 p2 + facet_grid(Species~Species2, space = "free", scale = "free_y") 
@@ -111,16 +111,16 @@ p2 + facet_grid(Species~Species2, space = "free", scales = "free") +
   ggside(collapse = "all")
 
 ## ----base_example_custom2-----------------------------------------------------
-p + geom_xsidedensity(aes(y=stat(density)))+
-  geom_ysidedensity(aes(x=stat(density), ycolor = Species2)) +
+p + geom_xsidedensity(aes(y=after_stat(density)))+
+  geom_ysidedensity(aes(x=after_stat(density), ycolor = Species2)) +
   theme_bw() + 
   facet_grid(Species~Species2, space = "free", scales = "free") +
   labs(title = "FacetGrid", subtitle = "Collapsing All Side Panels") +
   ggside(collapse = "all")
 
 ## ----base_example_custom3-----------------------------------------------------
-p + geom_xsidedensity(aes(y=stat(density), xfill = Species), position = "stack")+
-  geom_ysidedensity(aes(x=stat(density), yfill = Species2), position = "stack") +
+p + geom_xsidedensity(aes(y=after_stat(density), xfill = Species), position = "stack")+
+  geom_ysidedensity(aes(x=after_stat(density), yfill = Species2), position = "stack") +
   theme_bw() + 
   facet_grid(Species~Species2, space = "free", scales = "free") +
   labs(title = "FacetGrid", subtitle = "Collapsing All Side Panels") +
@@ -136,7 +136,8 @@ p2 + facet_wrap(Species~Species2, scales = "free") +
 ## ----base_example_theme-------------------------------------------------------
 p2 + facet_grid(Species~Species2, space = "free", scales = "free") +
   labs(title = "FacetGrid", subtitle = "Collapsing X Side Panels and \nAdjusted Side Panel Relative Size") +
-  ggside(collapse = "x", x.pos = "bottom", scales = "free_x") +
+  ggside(collapse = "all", x.pos = "bottom", scales = "free_x",
+         respect_side_labels = "y") +
   theme(ggside.panel.scale.x = .4,
         ggside.panel.scale.y = .25)
 
