@@ -1,7 +1,7 @@
 Package: ggside
 Type: Package
 Title: Side Grammar Graphics
-Version: 0.3.0
+Version: 0.3.1
 Authors@R: 
     person(given = "Justin",
            family = "Landis",
@@ -44,7 +44,7 @@ Collate: 'z-depricated.R' 'utils-ggproto.R' 'utils-calls.R'
         'utils-ggplot2-reimpl-facet.R' 'side-facet-wrap.R'
         'side-facet-grid.R' 'side-facet-null.R' 'stats.r' 'zzz.R'
 NeedsCompilation: no
-Packaged: 2024-02-26 01:32:03 UTC; jtlandis
+Packaged: 2024-02-29 15:35:07 UTC; jtlandis
 Author: Justin Landis [aut, cre] (<https://orcid.org/0000-0001-5501-4934>)
 Repository: CRAN
-Date/Publication: 2024-02-26 03:30:02 UTC
+Date/Publication: 2024-03-01 09:12:37 UTC
