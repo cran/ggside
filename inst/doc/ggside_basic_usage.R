@@ -23,11 +23,11 @@ ggplot(summariseDiamond, aes(x = color, y = `Cut Clarity`)) +
   geom_tile(aes(fill = `mean Price`))
 
 ## ----error_plot, eval = F-----------------------------------------------------
-#  p <-ggplot(summariseDiamond, aes(x = color, y = `Cut Clarity`)) +
-#    geom_tile(aes(fill = `mean Price`)) +
-#    geom_tile(aes(x=0, fill = cut))
-#  
-#  p
+# p <-ggplot(summariseDiamond, aes(x = color, y = `Cut Clarity`)) +
+#   geom_tile(aes(fill = `mean Price`)) +
+#   geom_tile(aes(x=0, fill = cut))
+# 
+# p
 
 ## ----ggplot_summarise_diamond-------------------------------------------------
 summariseDiamond <- summariseDiamond %>%
@@ -68,13 +68,13 @@ ggplot(summariseDiamond, aes(x = color, y = `Cut Clarity`)) +
   scale_yfill_gradient(low ="#FFFFFF", high = "#0000FF") 
 
 ## ----error_plot2, eval = FALSE------------------------------------------------
-#  p <- ggplot(summariseDiamond, aes(x = color, y = `Cut Clarity`)) +
-#    geom_tile(aes(fill = `mean Price`)) +
-#    geom_ysidetile(aes(yfill = `sd of means`)) + #sets yfill to a continuous scale
-#    geom_ysidetile(aes(yfill = cut)) #attempting to add discrete color values
-#  
-#  p
-#  
+# p <- ggplot(summariseDiamond, aes(x = color, y = `Cut Clarity`)) +
+#   geom_tile(aes(fill = `mean Price`)) +
+#   geom_ysidetile(aes(yfill = `sd of means`)) + #sets yfill to a continuous scale
+#   geom_ysidetile(aes(yfill = cut)) #attempting to add discrete color values
+# 
+# p
+# 
 
 ## ----base_example-------------------------------------------------------------
 i2 <- iris %>%
@@ -142,11 +142,11 @@ p2 + facet_grid(Species~Species2, space = "free", scales = "free") +
         ggside.panel.scale.y = .25)
 
 ## ----ggside_error, eval = F---------------------------------------------------
-#  ggplot(mpg, aes(displ, hwy, colour = class)) +
-#    geom_point(size = 2) +
-#    geom_xsideboxplot(aes(y =class), orientation = "y") +
-#    geom_ysidedensity(aes(x = after_stat(density)), position = "stack") +
-#    theme(ggside.panel.scale = .3)
+# ggplot(mpg, aes(displ, hwy, colour = class)) +
+#   geom_point(size = 2) +
+#   geom_xsideboxplot(aes(y =class), orientation = "y") +
+#   geom_ysidedensity(aes(x = after_stat(density)), position = "stack") +
+#   theme(ggside.panel.scale = .3)
 
 ## ----ggside_mix_axis----------------------------------------------------------
 ggplot(mpg, aes(displ, hwy, colour = class)) + 
