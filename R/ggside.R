@@ -33,6 +33,7 @@ NULL
 #' parameter to "x" is to "respect the labels of the xside panel" and
 #' consequently the yside labels, if present, are not respected.
 #'
+#' @aliases ggside-options ggside_options
 #' @seealso
 #' For more information regarding the ggside api: see [xside] or [yside]
 #' @return a object of class 'ggside_options' or to be added to a ggplot
@@ -71,7 +72,7 @@ new_ggside <- function(x.pos = "top", y.pos = "right", scales = "fixed", collaps
                        draw_x_on = c("default", "main", "side"),
                        draw_y_on = c("default", "main", "side"),
                        strip = c("default", "main"),
-                       respect_side_labels = FALSE) {
+                       respect_side_labels = "default") {
   draw_x_on <- match.arg(draw_x_on, c("default", "main", "side"))
   draw_y_on <- match.arg(draw_y_on, c("default", "main", "side"))
   strip <- match.arg(strip, c("default", "main"))
@@ -102,19 +103,21 @@ new_ggside <- function(x.pos = "top", y.pos = "right", scales = "fixed", collaps
 #' @param x Object to test
 #' @return A logical value
 #' @export
-is.ggside <- function(x) inherits(x, "ggside")
+is_ggside <- function(x) {
+  S7::S7_inherits(x, class_ggside) || inherits(x, "ggside")
+}
 
-#' @rdname is.ggside
+#' @rdname is_ggside
 #' @export
-is.ggside_layer <- function(x) inherits(x, "ggside_layer")
+is_ggside_layer <- function(x) inherits(x, "ggside_layer")
 
-#' @rdname is.ggside
+#' @rdname is_ggside
 #' @export
-is.ggside_options <- function(x) inherits(x, "ggside_options")
+is_ggside_options <- function(x) inherits(x, "ggside_options")
 
-#' @rdname is.ggside
+#' @rdname is_ggside
 #' @export
-is.ggside_scale <- function(x) inherits(x, "ggside_scale")
+is_ggside_scale <- function(x) inherits(x, "ggside_scale")
 
 #' @name xside
 #' @title The xside geometries

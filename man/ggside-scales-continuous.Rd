@@ -67,13 +67,13 @@ Also accepts rlang \link[rlang:as_function]{lambda} function notation.
 \item{minor_breaks}{One of:
 \itemize{
 \item \code{NULL} for no minor breaks
-\item \code{waiver()} for the default breaks (one minor break between
-each major break)
+\item \code{waiver()} for the default breaks (none for discrete, one minor break
+between each major break for continuous)
 \item A numeric vector of positions
 \item A function that given the limits returns a vector of minor breaks. Also
 accepts rlang \link[rlang:as_function]{lambda} function notation. When
 the function has two arguments, it will be given the limits and major
-breaks.
+break positions.
 }}
 
 \item{n.breaks}{An integer guiding the number of major breaks. The algorithm
@@ -81,7 +81,9 @@ may choose a slightly different number to ensure nice break labels. Will
 only have an effect if \code{breaks = waiver()}. Use \code{NULL} to use the default
 number of breaks given by the transformation.}
 
-\item{labels}{One of:
+\item{labels}{One of the options below. Please note that when \code{labels} is a
+vector, it is highly recommended to also set the \code{breaks} argument as a
+vector to protect against unintended mismatches.
 \itemize{
 \item \code{NULL} for no labels
 \item \code{waiver()} for the default labels computed by the
@@ -153,9 +155,11 @@ You can create your own transformation with \code{\link[scales:new_transform]{sc
 ggside_scale object inheriting from ggplot2::ScaleContinuousPosition
 }
 \description{
-The \link{xside} and \link{yside} variants of \link[ggplot2]{scale_x_continuous}/\link[ggplot2]{scale_y_continuous}.
-\link{scale_xsidey_continuous} enables better control on how the y-axis is rendered on the xside panel and
-\link{scale_ysidex_continuous} enables better control on how the x-axis is rendered on the yside panel.
+The \link{xside} and \link{yside} variants of \link[ggplot2]{scale_x_continuous}/
+\link[ggplot2]{scale_y_continuous}. \link{scale_xsidey_continuous} enables
+better control on how the y-axis is rendered on the xside panel and
+\link{scale_ysidex_continuous} enables better control on how the x-axis is
+rendered on the yside panel.
 }
 \examples{
 
@@ -166,19 +170,19 @@ ggplot(mpg, aes(hwy, class, colour = class)) +
   geom_boxplot() +
   geom_xsidedensity(position = "stack") +
   theme(ggside.panel.scale = .3) +
-  scale_xsidey_continuous(minor_breaks = NULL, limits = c(NA,1))
+  scale_xsidey_continuous(minor_breaks = NULL, limits = c(NA, 1))
 
-#If you need to specify the main scale, but need to prevent this from
-#affecting the side scale. Simply add the appropriate `scale_*side*_*()` function.
+# If you need to specify the main scale, but need to prevent this from
+# affecting the side scale. Simply add the appropriate `scale_*side*_*()` function.
 ggplot(mtcars, aes(wt, mpg)) +
   geom_point() +
   geom_xsidehistogram() +
-  geom_ysidehistogram()  +
+  geom_ysidehistogram() +
   scale_x_continuous(
-      breaks = seq(1, 6, 1),
-      #would otherwise remove the histogram
-      #as they have a lower value of 0.
-      limits = (c(1, 6))
-      ) +
-  scale_ysidex_continuous() #ensures the x-axis of the y-side panel has its own scale.
+    breaks = seq(1, 6, 1),
+    # would otherwise remove the histogram
+    # as they have a lower value of 0.
+    limits = (c(1, 6))
+  ) +
+  scale_ysidex_continuous() # ensures the x-axis of the y-side panel has its own scale.
 }

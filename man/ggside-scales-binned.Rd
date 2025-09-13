@@ -67,7 +67,9 @@ Note that for position scales, limits are provided after scale expansion.
 Also accepts rlang \link[rlang:as_function]{lambda} function notation.
 }}
 
-\item{labels}{One of:
+\item{labels}{One of the options below. Please note that when \code{labels} is a
+vector, it is highly recommended to also set the \code{breaks} argument as a
+vector to protect against unintended mismatches.
 \itemize{
 \item \code{NULL} for no labels
 \item \code{waiver()} for the default labels computed by the
@@ -150,9 +152,10 @@ The \link{xside} and \link{yside} variants of \link[ggplot2]{scale_x_binned}/\li
 \examples{
 
 ggplot(iris, aes(Sepal.Width, Sepal.Length)) +
-  geom_point() + geom_xsidepoint(aes(y = Petal.Width, xcolour = Petal.Length)) +
+  geom_point() +
+  geom_xsidepoint(aes(y = Petal.Width, xcolour = Petal.Length)) +
   scale_xsidey_binned(n.breaks = 4) +
-  scale_colour_steps(aesthetics ="xcolour", guide = guide_colorbar(available_aes = "xcolour")) +
+  scale_colour_steps(aesthetics = "xcolour", guide = guide_colorbar(available_aes = "xcolour")) +
   theme(ggside.panel.scale.x = .3)
 
 }

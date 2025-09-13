@@ -9,9 +9,6 @@
 \item{...}{
   Arguments passed on to \code{\link[ggplot2:discrete_scale]{discrete_scale}}
   \describe{
-    \item{\code{palette}}{A palette function that when called with a single integer
-argument (the number of levels in the scale) returns the values that
-they should take (e.g., \code{\link[scales:pal_hue]{scales::pal_hue()}}).}
     \item{\code{breaks}}{One of:
 \itemize{
 \item \code{NULL} for no breaks
@@ -41,7 +38,20 @@ from a discrete scale, specify \code{na.translate = FALSE}.}
 missing values be displayed as? Does not apply to position scales
 where \code{NA} is always placed at the far right.}
     \item{\code{aesthetics}}{The names of the aesthetics that this scale works with.}
-    \item{\code{labels}}{One of:
+    \item{\code{minor_breaks}}{One of:
+\itemize{
+\item \code{NULL} for no minor breaks
+\item \code{waiver()} for the default breaks (none for discrete, one minor break
+between each major break for continuous)
+\item A numeric vector of positions
+\item A function that given the limits returns a vector of minor breaks. Also
+accepts rlang \link[rlang:as_function]{lambda} function notation. When
+the function has two arguments, it will be given the limits and major
+break positions.
+}}
+    \item{\code{labels}}{One of the options below. Please note that when \code{labels} is a
+vector, it is highly recommended to also set the \code{breaks} argument as a
+vector to protect against unintended mismatches.
 \itemize{
 \item \code{NULL} for no labels
 \item \code{waiver()} for the default labels computed by the
@@ -84,15 +94,16 @@ library(ggplot2)
 # adding discrete y-scale to the x-side panel, when main panel mapped to continuous data
 ggplot(mpg, aes(displ, hwy, colour = class)) +
   geom_point() +
-  geom_xsideboxplot(aes(y=class), orientation = "y") +
+  geom_xsideboxplot(aes(y = class), orientation = "y") +
   theme(ggside.panel.scale = .3) +
   scale_xsidey_discrete(guide = guide_axis(angle = 45))
 
-#If you need to specify the main scale, but need to prevent this from
-#affecting the side scale. Simply add the appropriate `scale_*side*_*()` function.
+# If you need to specify the main scale, but need to prevent this from
+# affecting the side scale. Simply add the appropriate `scale_*side*_*()`
+# function.
 ggplot(mpg, aes(class, displ)) +
   geom_boxplot() +
   geom_ysideboxplot(aes(x = "all"), orientation = "x") +
-  scale_x_discrete(guide = guide_axis(angle = 90)) + #rotate the main panel text
-  scale_ysidex_discrete() #leave side panel as default
+  scale_x_discrete(guide = guide_axis(angle = 90)) + # rotate the main panel text
+  scale_ysidex_discrete() # leave side panel as default
 }
