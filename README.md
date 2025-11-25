@@ -1,14 +1,14 @@
 # README
 Justin Landis
-2025-09-12
+2025-11-24
 
 # ggside <a href="https://jtlandis.github.io/ggside/"><img src="inst/figures/ggside.png" align="right" style="float:right" height="200" alt="plyxp website" /></a>
 
 <!-- badges: start -->
 
-[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version-ago/ggside.png)](https://cran.r-project.org/package=ggside)
-[![CRAN_Download_Badge](http://cranlogs.r-pkg.org/badges/ggside.png)](https://cran.r-project.org/package=ggside)
-[![CRAN_Download_Badge](http://cranlogs.r-pkg.org/badges/grand-total/ggside.png)](https://cran.r-project.org/package=ggside)
+[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version-ago/ggside)](https://cran.r-project.org/package=ggside)
+[![CRAN_Download_Badge](http://cranlogs.r-pkg.org/badges/ggside)](https://cran.r-project.org/package=ggside)
+[![CRAN_Download_Badge](http://cranlogs.r-pkg.org/badges/grand-total/ggside)](https://cran.r-project.org/package=ggside)
 [![R-CMD-check](https://github.com/jtlandis/ggside/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/jtlandis/ggside/actions/workflows/R-CMD-check.yaml)
 [![Codecov test
 coverage](https://codecov.io/gh/jtlandis/ggside/branch/main/graph/badge.svg)](https://app.codecov.io/gh/jtlandis/ggside?branch=main)
@@ -107,3 +107,26 @@ current CRAN release. These will either be fixed on the main branch of
 this git repository, or currently in development to be fixed on one of
 the development branches. The current CRAN version of `ggside` is
 v0.4.0.
+
+-   When using layer that requires its some positional scale on the main
+    panel to be computed later, but the same positional scale is present
+    on the parallel side layer that is meant to be discrete, you may see
+    a warning and the data may be missing. Below is an example:
+
+    ``` r
+    ggplot(iris, aes(Sepal.Width)) + 
+      # main panel y scale initializes later
+      geom_density() + 
+      # xsidey scale is discrete but misses initial training
+      geom_xsidepoint(aes(y = Species))
+    ```
+
+    To remedy this, please explicitly declare the scale for the main
+    panels:
+
+    ``` r
+    ggplot(iris, aes(Sepal.Width)) + 
+      geom_density() + 
+      geom_xsidepoint(aes(y = Species)) +
+      scale_y_continuous() 
+    ```
